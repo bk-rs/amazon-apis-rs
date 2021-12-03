@@ -1,0 +1,9 @@
+[package]
+name = "amazon-rekognition"
+version = "0.0.0"
+edition = "2021"
+
+[dependencies]
+http-api-client-endpoint = { version = "0.2", default-features = false }
+
+serde = { version = "1.0", default-features = false, features = ["std", "derive"] }
