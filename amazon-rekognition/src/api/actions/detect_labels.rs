@@ -2,10 +2,21 @@
 
 use serde::{Deserialize, Serialize};
 
-use crate::api::data_types::{image::Image, label::Label};
+use crate::{
+    api::{
+        data_types::{image::Image, label::Label},
+        utils::{
+            required_header_x_amz_target_value, REQUIRED_HEADER_CONTENT_TYPE_VALUE,
+            REQUIRED_HEADER_X_AMZ_TARGET_KEY,
+        },
+    },
+    ServiceEndpoint,
+};
 
 #[derive(Debug, Clone)]
-pub struct DetectLabels {}
+pub struct DetectLabels {
+    service_endpoint: ServiceEndpoint,
+}
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct DetectLabelsRequestBody {
