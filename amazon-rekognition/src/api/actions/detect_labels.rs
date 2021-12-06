@@ -15,7 +15,7 @@ pub const OPERATION_NAME: &str = "DetectLabels";
 pub fn new<'a>(
     access_key_id: &'a str,
     secret_access_key: &'a str,
-    service_endpoint: &'a ServiceEndpoint,
+    service_endpoint: ServiceEndpoint<'a>,
     request_body: DetectLabelsRequestBody,
 ) -> Action<'a, DetectLabelsRequestBody, DetectLabelsResponseOkBody> {
     Action::new(

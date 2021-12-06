@@ -37,7 +37,7 @@ where
 {
     pub access_key_id: &'a str,
     pub secret_access_key: &'a str,
-    pub service_endpoint: &'a ServiceEndpoint,
+    pub service_endpoint: ServiceEndpoint<'a>,
     pub request_body: ReqB,
     pub operation_name: &'a str,
     //
@@ -69,7 +69,7 @@ where
         Self {
             access_key_id: self.access_key_id,
             secret_access_key: self.secret_access_key,
-            service_endpoint: self.service_endpoint,
+            service_endpoint: self.service_endpoint.clone(),
             request_body: self.request_body.clone(),
             operation_name: self.operation_name,
             _phantom: PhantomData,
@@ -85,7 +85,7 @@ where
     pub fn new(
         access_key_id: &'a str,
         secret_access_key: &'a str,
-        service_endpoint: &'a ServiceEndpoint,
+        service_endpoint: ServiceEndpoint<'a>,
         request_body: ReqB,
         operation_name: &'a str,
     ) -> Self {

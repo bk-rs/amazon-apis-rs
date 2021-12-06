@@ -32,7 +32,7 @@ async fn run() -> Result<(), Box<dyn error::Error>> {
     let detect_labels = detect_labels::new(
         &access_key_id,
         &secret_access_key,
-        &ServiceEndpoint::USEastOhio,
+        ServiceEndpoint::USEastOhio,
         DetectLabelsRequestBody {
             image: Image::with_bytes(image_bytes.to_vec()),
             max_labels: None,
@@ -48,7 +48,10 @@ async fn run() -> Result<(), Box<dyn error::Error>> {
     let action: Action<_, Map<String, Value>> = Action::new(
         &access_key_id,
         &secret_access_key,
-        &ServiceEndpoint::USEastOhio,
+        ServiceEndpoint::other(
+            "ap-southeast-1",
+            "https://rekognition.ap-southeast-1.amazonaws.com",
+        ),
         json!({
             "Image": {
                 "Bytes": base64::encode(image_bytes.to_vec()),

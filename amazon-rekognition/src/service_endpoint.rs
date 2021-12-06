@@ -1,9 +1,7 @@
 //! [Amazon Rekognition endpoints and quotas](https://docs.aws.amazon.com/general/latest/gr/rekognition.html)
 
-use std::borrow::{Borrow, Cow};
-
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub enum ServiceEndpoint {
+pub enum ServiceEndpoint<'a> {
     //
     USEastOhio,
     USEastOhioFIPS,
@@ -15,18 +13,19 @@ pub enum ServiceEndpoint {
     //
     // TODO
     //
-    Other {
-        region: Cow<'static, str>,
-        url: Cow<'static, str>,
-    },
+    Other { region: &'a str, url: &'a str },
 }
 
-impl ServiceEndpoint {
+impl<'a> ServiceEndpoint<'a> {
+    pub fn other(region: &'a str, url: &'a str) -> Self {
+        Self::Other { region, url }
+    }
+
     pub fn region(&self) -> &str {
         match self {
             Self::USEastOhio | Self::USEastOhioFIPS => "us-east-2",
             Self::AsiaPacificMumbai => "ap-south-1",
-            Self::Other { region, url: _ } => region.borrow(),
+            Self::Other { region, url: _ } => region,
         }
     }
 
