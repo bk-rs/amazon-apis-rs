@@ -4,8 +4,9 @@ version = "0.0.0"
 edition = "2021"
 
 [dependencies]
+amazon-sigv4-kit = { version = "^0.0", path = "../amazon-sigv4-kit" }
+
 http-api-client-endpoint = { version = "0.2", default-features = false }
-aws-sigv4 = { version = "0.2", default-features = false, features = ["sign-http"]}
 
 serde = { version = "1.0", default-features = false, features = ["std", "derive"] }
 serde_json = { version = "1.0", default-features = false, features = ["std"] }

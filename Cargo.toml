@@ -2,4 +2,6 @@
 members = [
     "amazon-rekognition",
     "amazon-rekognition/demo",
+    #
+    "amazon-sigv4-kit",
 ]

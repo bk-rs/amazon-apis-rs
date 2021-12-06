@@ -1,0 +1,8 @@
+[package]
+name = "amazon-sigv4-kit"
+version = "0.0.0"
+edition = "2021"
+
+[dependencies]
+aws-sigv4 = { version = "0.2", default-features = false, features = ["sign-http"]}
+http = { version = "0.2", default-features = false }
