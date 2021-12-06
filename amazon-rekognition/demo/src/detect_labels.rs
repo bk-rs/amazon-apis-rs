@@ -28,7 +28,7 @@ async fn run() -> Result<(), Box<dyn error::Error>> {
 
     let client = IsahcClient::new()?;
 
-    //
+    // Case 1
     let detect_labels = detect_labels::new(
         &access_key_id,
         &secret_access_key,
@@ -43,7 +43,7 @@ async fn run() -> Result<(), Box<dyn error::Error>> {
     let ret = client.respond_endpoint(&detect_labels).await?;
     println!("{:?}", ret);
 
-    //
+    // Case 2
     let action: Action<_, Map<String, Value>> = Action::new(
         &access_key_id,
         &secret_access_key,
