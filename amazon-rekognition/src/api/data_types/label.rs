@@ -2,11 +2,13 @@
 
 use serde::{Deserialize, Serialize};
 
+use super::{Instance, Parent};
+
 #[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "PascalCase")]
 pub struct Label {
     pub confidence: Option<f64>,
-    // TODO
+    pub instances: Option<Vec<Instance>>,
     pub name: Option<String>,
-    // TODO
+    pub parents: Option<Vec<Parent>>,
 }

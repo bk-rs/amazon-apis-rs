@@ -1,8 +1,8 @@
 //! https://docs.aws.amazon.com/rekognition/latest/dg/API_Image.html
 
-use super::s3_object::S3Object;
-
 use serde::{Deserialize, Serialize};
+
+use super::s3_object::S3Object;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "PascalCase")]
