@@ -174,3 +174,20 @@ pub enum ActionEndpointError {
     #[error("DeResponseOkBodyFailed {0}")]
     DeResponseOkBodyFailed(SerdeJsonError),
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn de_response_err_body() {
+        match serde_json::from_str::<ActionResponseErrBody>(include_str!(
+            "../../../tests/response_body_json_files/detect_labels_err.json"
+        )) {
+            Ok(err_json) => {
+                assert_eq!(err_json.r#type, "SerializationException");
+            }
+            Err(err) => panic!("{}", err),
+        }
+    }
+}

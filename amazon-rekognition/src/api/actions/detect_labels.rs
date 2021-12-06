@@ -46,3 +46,20 @@ pub struct DetectLabelsResponseOkBody {
     #[serde(rename = "OrientationCorrection")]
     pub orientation_correction: Option<String>,
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn de_response_ok_body() {
+        match serde_json::from_str::<DetectLabelsResponseOkBody>(include_str!(
+            "../../../tests/response_body_json_files/detect_labels_ok.json"
+        )) {
+            Ok(ok_json) => {
+                assert_eq!(ok_json.labels.len(), 13);
+            }
+            Err(err) => panic!("{}", err),
+        }
+    }
+}

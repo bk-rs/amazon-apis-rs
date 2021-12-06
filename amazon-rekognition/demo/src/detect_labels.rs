@@ -6,13 +6,14 @@ use std::{env, error};
 
 use amazon_rekognition::{
     api::{
-        actions::{detect_labels, DetectLabelsRequestBody},
+        actions::{detect_labels, Action, DetectLabelsRequestBody},
         data_types::Image,
     },
     ServiceEndpoint,
 };
 use futures_lite::future::block_on;
 use http_api_isahc_client::{Client as _, IsahcClient};
+use serde_json::{json, Map, Value};
 
 fn main() -> Result<(), Box<dyn error::Error>> {
     pretty_env_logger::init();
@@ -27,6 +28,7 @@ async fn run() -> Result<(), Box<dyn error::Error>> {
 
     let client = IsahcClient::new()?;
 
+    //
     let detect_labels = detect_labels::new(
         &access_key_id,
         &secret_access_key,
@@ -39,7 +41,21 @@ async fn run() -> Result<(), Box<dyn error::Error>> {
     );
 
     let ret = client.respond_endpoint(&detect_labels).await?;
+    println!("{:?}", ret);
 
+    //
+    let action: Action<_, Map<String, Value>> = Action::new(
+        &access_key_id,
+        &secret_access_key,
+        &ServiceEndpoint::USEastOhio,
+        json!({
+            "Image": {
+                "Bytes": base64::encode(image_bytes.to_vec()),
+            }
+        }),
+        "DetectLabels",
+    );
+    let ret = client.respond_endpoint(&action).await?;
     println!("{:?}", ret);
 
     Ok(())
