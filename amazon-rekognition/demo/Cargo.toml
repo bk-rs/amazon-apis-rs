@@ -1,0 +1,16 @@
+[package]
+name = "amazon-rekognition-demo"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "amazon_rekognition_detect_labels"
+path = "src/detect_labels.rs"
+
+[dependencies]
+amazon-rekognition = { path = ".." }
+
+http-api-isahc-client = { version = "0.2" }
+
+futures-lite = { version = "1.11" }
+pretty_env_logger = { version = "0.4" }

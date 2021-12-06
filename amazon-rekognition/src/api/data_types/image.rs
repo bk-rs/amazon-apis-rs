@@ -5,9 +5,28 @@ use super::s3_object::S3Object;
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-pub enum Image {
+pub struct Image {
     #[serde(rename = "Bytes")]
-    Bytes(Vec<u8>),
+    pub bytes: Option<String>,
     #[serde(rename = "S3Object")]
-    S3Object(S3Object),
+    pub s3_object: Option<S3Object>,
+    #[serde(skip)]
+    _priv: (),
+}
+impl Image {
+    pub fn with_bytes(binary_data: Vec<u8>) -> Self {
+        Self {
+            bytes: Some(base64::encode(binary_data)),
+            s3_object: None,
+            _priv: (),
+        }
+    }
+
+    pub fn with_s3_object(s3_object: S3Object) -> Self {
+        Self {
+            bytes: None,
+            s3_object: Some(s3_object),
+            _priv: (),
+        }
+    }
 }

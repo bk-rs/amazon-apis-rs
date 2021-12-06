@@ -1,5 +1,5 @@
 //
-pub const SERVICE_NAME: &str = "Amazon Rekognition";
+pub const SERVICE_NAME: &str = "rekognition";
 
 pub mod api;
 pub mod service_endpoint;

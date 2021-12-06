@@ -5,9 +5,9 @@ use serde::{Deserialize, Serialize};
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct S3Object {
     #[serde(rename = "Bucket")]
-    bucket: String,
+    pub bucket: String,
     #[serde(rename = "Name")]
-    name: String,
+    pub name: String,
     #[serde(rename = "Version")]
-    version: Option<String>,
+    pub version: Option<String>,
 }

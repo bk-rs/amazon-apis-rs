@@ -1,4 +1,5 @@
 [workspace]
 members = [
     "amazon-rekognition",
+    "amazon-rekognition/demo",
 ]

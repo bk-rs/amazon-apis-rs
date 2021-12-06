@@ -5,5 +5,10 @@ edition = "2021"
 
 [dependencies]
 http-api-client-endpoint = { version = "0.2", default-features = false }
+aws-sigv4 = { version = "0.2", default-features = false, features = ["sign-http"]}
 
 serde = { version = "1.0", default-features = false, features = ["std", "derive"] }
+serde_json = { version = "1.0", default-features = false, features = ["std"] }
+base64 = { version = "0.13", default-features = false, features = ["std"]}
+
+thiserror = { version = "1.0", default-features = false }

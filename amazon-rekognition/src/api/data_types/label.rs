@@ -5,9 +5,9 @@ use serde::{Deserialize, Serialize};
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Label {
     #[serde(rename = "Confidence")]
-    confidence: Option<f64>,
+    pub confidence: Option<f64>,
     // TODO
     #[serde(rename = "Name")]
-    name: Option<String>,
+    pub name: Option<String>,
     // TODO
 }
