@@ -6,7 +6,7 @@ use std::{env, error};
 
 use amazon_rekognition::{
     api::{
-        actions::{DetectLabels, DetectLabelsRequestBody},
+        actions::{detect_labels, DetectLabelsRequestBody},
         data_types::Image,
     },
     ServiceEndpoint,
@@ -27,7 +27,7 @@ async fn run() -> Result<(), Box<dyn error::Error>> {
 
     let client = IsahcClient::new()?;
 
-    let detect_labels = DetectLabels::new(
+    let detect_labels = detect_labels::new(
         access_key_id,
         secret_access_key,
         ServiceEndpoint::USEastOhio,
