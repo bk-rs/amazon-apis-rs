@@ -39,7 +39,7 @@ where
     pub secret_access_key: &'a str,
     pub service_endpoint: &'a ServiceEndpoint,
     pub request_body: ReqB,
-    pub operation: &'a str,
+    pub operation_name: &'a str,
     //
     _phantom: PhantomData<ResOkB>,
 }
@@ -54,14 +54,14 @@ where
         secret_access_key: &'a str,
         service_endpoint: &'a ServiceEndpoint,
         request_body: ReqB,
-        operation: &'a str,
+        operation_name: &'a str,
     ) -> Self {
         Self {
             access_key_id,
             secret_access_key,
             service_endpoint,
             request_body,
-            operation,
+            operation_name,
             _phantom: PhantomData,
         }
     }
@@ -91,7 +91,7 @@ where
             .header(ACCEPT, REQUIRED_HEADER_CONTENT_TYPE_VALUE)
             .header(
                 REQUIRED_HEADER_X_AMZ_TARGET_KEY,
-                required_header_x_amz_target_value(&self.operation),
+                required_header_x_amz_target_value(&self.operation_name),
             )
             .body(body)
             .map_err(ActionEndpointError::MakeRequestFailed)?;

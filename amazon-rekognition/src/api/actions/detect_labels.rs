@@ -10,7 +10,7 @@ use crate::{
 
 use super::Action;
 
-pub const OPERATION: &str = "DetectLabels";
+pub const OPERATION_NAME: &str = "DetectLabels";
 
 pub fn new<'a>(
     access_key_id: &'a str,
@@ -23,7 +23,7 @@ pub fn new<'a>(
         secret_access_key.as_ref(),
         service_endpoint,
         request_body,
-        OPERATION,
+        OPERATION_NAME,
     )
 }
 
