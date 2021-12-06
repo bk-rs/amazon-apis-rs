@@ -30,41 +30,44 @@ use crate::{
 //
 //
 //
-pub struct Action<ReqB, ResOkB>
+pub struct Action<'a, ReqB, ResOkB>
 where
     ReqB: Serialize,
     ResOkB: DeserializeOwned + fmt::Debug + Clone,
 {
-    pub access_key_id: String,
-    pub secret_access_key: String,
-    pub service_endpoint: ServiceEndpoint,
+    pub access_key_id: &'a str,
+    pub secret_access_key: &'a str,
+    pub service_endpoint: &'a ServiceEndpoint,
     pub request_body: ReqB,
+    pub operation: &'a str,
     //
     _phantom: PhantomData<ResOkB>,
 }
 
-impl<ReqB, ResOkB> Action<ReqB, ResOkB>
+impl<'a, ReqB, ResOkB> Action<'a, ReqB, ResOkB>
 where
     ReqB: Serialize,
     ResOkB: DeserializeOwned + fmt::Debug + Clone,
 {
     pub fn new(
-        access_key_id: String,
-        secret_access_key: String,
-        service_endpoint: ServiceEndpoint,
+        access_key_id: &'a str,
+        secret_access_key: &'a str,
+        service_endpoint: &'a ServiceEndpoint,
         request_body: ReqB,
+        operation: &'a str,
     ) -> Self {
         Self {
             access_key_id,
             secret_access_key,
             service_endpoint,
             request_body,
+            operation,
             _phantom: PhantomData,
         }
     }
 }
 
-impl<ReqB, ResOkB> Endpoint for Action<ReqB, ResOkB>
+impl<'a, ReqB, ResOkB> Endpoint for Action<'a, ReqB, ResOkB>
 where
     ReqB: Serialize,
     ResOkB: DeserializeOwned + fmt::Debug + Clone,
@@ -88,7 +91,7 @@ where
             .header(ACCEPT, REQUIRED_HEADER_CONTENT_TYPE_VALUE)
             .header(
                 REQUIRED_HEADER_X_AMZ_TARGET_KEY,
-                required_header_x_amz_target_value("DetectLabels"),
+                required_header_x_amz_target_value(&self.operation),
             )
             .body(body)
             .map_err(ActionEndpointError::MakeRequestFailed)?;

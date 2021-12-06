@@ -28,9 +28,9 @@ async fn run() -> Result<(), Box<dyn error::Error>> {
     let client = IsahcClient::new()?;
 
     let detect_labels = detect_labels::new(
-        access_key_id,
-        secret_access_key,
-        ServiceEndpoint::USEastOhio,
+        &access_key_id,
+        &secret_access_key,
+        &ServiceEndpoint::USEastOhio,
         DetectLabelsRequestBody {
             image: Image::with_bytes(image_bytes.to_vec()),
             max_labels: None,

@@ -10,17 +10,20 @@ use crate::{
 
 use super::Action;
 
-pub fn new(
-    access_key_id: String,
-    secret_access_key: String,
-    service_endpoint: ServiceEndpoint,
+pub const OPERATION: &str = "DetectLabels";
+
+pub fn new<'a>(
+    access_key_id: &'a str,
+    secret_access_key: &'a str,
+    service_endpoint: &'a ServiceEndpoint,
     request_body: DetectLabelsRequestBody,
-) -> Action<DetectLabelsRequestBody, DetectLabelsResponseOkBody> {
+) -> Action<'a, DetectLabelsRequestBody, DetectLabelsResponseOkBody> {
     Action::new(
         access_key_id,
-        secret_access_key,
+        secret_access_key.as_ref(),
         service_endpoint,
         request_body,
+        OPERATION,
     )
 }
 
