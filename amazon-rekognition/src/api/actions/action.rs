@@ -154,10 +154,10 @@ where
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "PascalCase")]
 pub struct ActionResponseErrBody {
     #[serde(rename = "__type")]
     pub r#type: String,
-    #[serde(rename = "Message")]
     pub message: String,
 }
 

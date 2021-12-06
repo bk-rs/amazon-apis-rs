@@ -28,22 +28,18 @@ pub fn new<'a>(
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "PascalCase")]
 pub struct DetectLabelsRequestBody {
-    #[serde(rename = "Image")]
     pub image: Image,
-    #[serde(rename = "MaxLabels")]
     pub max_labels: Option<usize>,
-    #[serde(rename = "MinConfidence")]
     pub min_confidence: Option<f64>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "PascalCase")]
 pub struct DetectLabelsResponseOkBody {
-    #[serde(rename = "LabelModelVersion")]
     pub label_model_version: String,
-    #[serde(rename = "Labels")]
     pub labels: Vec<Label>,
-    #[serde(rename = "OrientationCorrection")]
     pub orientation_correction: Option<String>,
 }
 

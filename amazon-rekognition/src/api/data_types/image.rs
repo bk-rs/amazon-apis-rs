@@ -5,10 +5,9 @@ use super::s3_object::S3Object;
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "PascalCase")]
 pub struct Image {
-    #[serde(rename = "Bytes")]
     pub bytes: Option<String>,
-    #[serde(rename = "S3Object")]
     pub s3_object: Option<S3Object>,
     #[serde(skip)]
     _priv: (),
