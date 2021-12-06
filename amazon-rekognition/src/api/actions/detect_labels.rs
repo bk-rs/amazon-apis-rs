@@ -2,34 +2,25 @@
 //! https://docs.aws.amazon.com/rekognition/latest/dg/labels-detect-labels-image.html
 //! https://stackoverflow.com/questions/48527517/an-example-of-calling-aws-rekognition-http-api-from-php
 
-use std::time::SystemTime;
-
-use aws_sigv4::{
-    http_request::{
-        sign, Error as AwsSigv4HttpRequestSignError, SignableRequest, SigningParams,
-        SigningSettings,
-    },
-    signing_params::BuildError as AwsSigv4SigningParamsBuildError,
-};
 use http_api_client_endpoint::{
     http::{
         header::{ACCEPT, CONTENT_TYPE},
-        Error as HttpError, Method, StatusCode,
+        Method,
     },
     Body, Endpoint, Request, Response,
 };
 use serde::{Deserialize, Serialize};
-use serde_json::{Error as SerdeJsonError, Map, Value};
 
 use crate::{
     api::{
+        actions::common::{action_parse_response, sign_request, EndpointError, EndpointRet},
         data_types::{Image, Label},
         utils::{
             required_header_x_amz_target_value, REQUIRED_HEADER_CONTENT_TYPE_VALUE,
             REQUIRED_HEADER_X_AMZ_TARGET_KEY,
         },
     },
-    ServiceEndpoint, SERVICE_NAME,
+    ServiceEndpoint,
 };
 
 #[derive(Debug, Clone)]
@@ -56,19 +47,19 @@ impl DetectLabels {
 }
 
 impl Endpoint for DetectLabels {
-    type RenderRequestError = DetectLabelsError;
+    type RenderRequestError = EndpointError;
 
-    type ParseResponseOutput = Result<DetectLabelsResponseOkBody, (StatusCode, Map<String, Value>)>;
+    type ParseResponseOutput = EndpointRet<DetectLabelsResponseOkBody>;
 
-    type ParseResponseError = DetectLabelsError;
+    type ParseResponseError = EndpointError;
 
     fn render_request(&self) -> Result<Request<Body>, Self::RenderRequestError> {
         let url = self.service_endpoint.url();
 
-        let body = serde_json::to_vec(&self.request_body)
-            .map_err(DetectLabelsError::SerRequestBodyFailed)?;
+        let body =
+            serde_json::to_vec(&self.request_body).map_err(EndpointError::SerRequestBodyFailed)?;
 
-        let mut request = Request::builder()
+        let request = Request::builder()
             .method(Method::POST)
             .uri(url)
             .header(CONTENT_TYPE, REQUIRED_HEADER_CONTENT_TYPE_VALUE)
@@ -78,25 +69,14 @@ impl Endpoint for DetectLabels {
                 required_header_x_amz_target_value("DetectLabels"),
             )
             .body(body)
-            .map_err(DetectLabelsError::MakeRequestFailed)?;
+            .map_err(EndpointError::MakeRequestFailed)?;
 
-        let signing_settings = SigningSettings::default();
-        let signing_params = SigningParams::builder()
-            .access_key(&self.access_key_id)
-            .secret_key(&self.secret_access_key)
-            .region(self.service_endpoint.region())
-            .service_name(SERVICE_NAME)
-            .time(SystemTime::now())
-            .settings(signing_settings)
-            .build()
-            .map_err(DetectLabelsError::MakeSigningParamsFailed)?;
-
-        let signable_request = SignableRequest::from(&request);
-        let (signing_instructions, _signature) = sign(signable_request, &signing_params)
-            .map_err(DetectLabelsError::SignFailed)?
-            .into_parts();
-
-        signing_instructions.apply_to_request(&mut request);
+        let request = sign_request(
+            request,
+            &self.access_key_id,
+            &self.secret_access_key,
+            &self.service_endpoint,
+        )?;
 
         Ok(request)
     }
@@ -105,33 +85,8 @@ impl Endpoint for DetectLabels {
         &self,
         response: Response<Body>,
     ) -> Result<Self::ParseResponseOutput, Self::ParseResponseError> {
-        println!("{:?}", String::from_utf8(response.body().to_owned()));
-
-        let status = response.status();
-        match status {
-            StatusCode::OK => Ok(Ok(serde_json::from_slice(response.body())
-                .map_err(DetectLabelsError::DeResponseOkBodyFailed)?)),
-            status => Ok(Err(serde_json::from_slice::<Map<String, Value>>(
-                response.body(),
-            )
-            .map(|x| (status, x))
-            .map_err(DetectLabelsError::DeResponseOkBodyFailed)?)),
-        }
+        action_parse_response(response)
     }
-}
-
-#[derive(thiserror::Error, Debug)]
-pub enum DetectLabelsError {
-    #[error("SerRequestBodyFailed {0}")]
-    SerRequestBodyFailed(SerdeJsonError),
-    #[error("MakeRequestFailed {0}")]
-    MakeRequestFailed(HttpError),
-    #[error("MakeSigningParamsFailed {0}")]
-    MakeSigningParamsFailed(AwsSigv4SigningParamsBuildError),
-    #[error("SignFailed {0}")]
-    SignFailed(AwsSigv4HttpRequestSignError),
-    #[error("DeResponseOkBodyFailed {0}")]
-    DeResponseOkBodyFailed(SerdeJsonError),
 }
 
 //
