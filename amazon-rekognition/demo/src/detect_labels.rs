@@ -39,6 +39,7 @@ async fn run() -> Result<(), Box<dyn error::Error>> {
             min_confidence: None,
         },
     );
+    println!("{:?}", detect_labels.clone());
 
     let ret = client.respond_endpoint(&detect_labels).await?;
     println!("{:?}", ret);
@@ -55,6 +56,7 @@ async fn run() -> Result<(), Box<dyn error::Error>> {
         }),
         "DetectLabels",
     );
+
     let ret = client.respond_endpoint(&action).await?;
     println!("{:?}", ret);
 

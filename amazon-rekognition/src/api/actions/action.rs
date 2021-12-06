@@ -44,6 +44,39 @@ where
     _phantom: PhantomData<ResOkB>,
 }
 
+impl<'a, ReqB, ResOkB> fmt::Debug for Action<'a, ReqB, ResOkB>
+where
+    ReqB: Serialize + fmt::Debug,
+    ResOkB: DeserializeOwned + fmt::Debug + Clone,
+{
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("Action")
+            .field("access_key_id", &self.access_key_id)
+            .field("secret_access_key", &format_args!("******"))
+            .field("service_endpoint", &self.service_endpoint)
+            .field("request_body", &self.request_body)
+            .field("operation_name", &self.operation_name)
+            .finish()
+    }
+}
+
+impl<'a, ReqB, ResOkB> Clone for Action<'a, ReqB, ResOkB>
+where
+    ReqB: Serialize + Clone,
+    ResOkB: DeserializeOwned + fmt::Debug + Clone,
+{
+    fn clone(&self) -> Self {
+        Self {
+            access_key_id: &self.access_key_id,
+            secret_access_key: &self.secret_access_key,
+            service_endpoint: &self.service_endpoint,
+            request_body: self.request_body.clone(),
+            operation_name: self.operation_name,
+            _phantom: PhantomData,
+        }
+    }
+}
+
 impl<'a, ReqB, ResOkB> Action<'a, ReqB, ResOkB>
 where
     ReqB: Serialize,

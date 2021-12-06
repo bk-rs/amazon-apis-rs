@@ -31,7 +31,9 @@ pub fn new<'a>(
 #[serde(rename_all = "PascalCase")]
 pub struct DetectLabelsRequestBody {
     pub image: Image,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_labels: Option<usize>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub min_confidence: Option<f64>,
 }
 
@@ -40,6 +42,7 @@ pub struct DetectLabelsRequestBody {
 pub struct DetectLabelsResponseOkBody {
     pub label_model_version: String,
     pub labels: Vec<Label>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub orientation_correction: Option<String>,
 }
 

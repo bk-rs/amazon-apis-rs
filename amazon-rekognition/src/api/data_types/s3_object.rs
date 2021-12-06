@@ -7,5 +7,6 @@ use serde::{Deserialize, Serialize};
 pub struct S3Object {
     pub bucket: String,
     pub name: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
 }
