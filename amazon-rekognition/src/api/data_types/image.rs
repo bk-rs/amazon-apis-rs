@@ -13,8 +13,6 @@ pub struct Image {
     pub bytes: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_object: Option<S3Object>,
-    #[serde(skip)]
-    _priv: (),
 }
 impl fmt::Debug for Image {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -40,14 +38,12 @@ impl Image {
         Self {
             bytes: Some(base64::encode(binary_data)),
             s3_object: None,
-            _priv: (),
         }
     }
     pub fn with_s3_object(s3_object: S3Object) -> Self {
         Self {
             bytes: None,
             s3_object: Some(s3_object),
-            _priv: (),
         }
     }
 }

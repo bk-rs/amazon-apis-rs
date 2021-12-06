@@ -67,9 +67,9 @@ where
 {
     fn clone(&self) -> Self {
         Self {
-            access_key_id: &self.access_key_id,
-            secret_access_key: &self.secret_access_key,
-            service_endpoint: &self.service_endpoint,
+            access_key_id: self.access_key_id,
+            secret_access_key: self.secret_access_key,
+            service_endpoint: self.service_endpoint,
             request_body: self.request_body.clone(),
             operation_name: self.operation_name,
             _phantom: PhantomData,
@@ -124,7 +124,7 @@ where
             .header(ACCEPT, REQUIRED_HEADER_CONTENT_TYPE_VALUE)
             .header(
                 REQUIRED_HEADER_X_AMZ_TARGET_KEY,
-                required_header_x_amz_target_value(&self.operation_name),
+                required_header_x_amz_target_value(self.operation_name),
             )
             .body(body)
             .map_err(ActionEndpointError::MakeRequestFailed)?;
@@ -132,8 +132,8 @@ where
         //
         let signing_settings = SigningSettings::default();
         let signing_params = SigningParams::builder()
-            .access_key(&self.access_key_id)
-            .secret_key(&self.secret_access_key)
+            .access_key(self.access_key_id)
+            .secret_key(self.secret_access_key)
             .region(self.service_endpoint.region())
             .service_name(SERVICE_NAME)
             .time(SystemTime::now())
@@ -158,12 +158,12 @@ where
         let status = response.status();
         match status {
             StatusCode::OK => {
-                let ok_json = serde_json::from_slice::<ResOkB>(&response.body())
+                let ok_json = serde_json::from_slice::<ResOkB>(response.body())
                     .map_err(ActionEndpointError::DeResponseOkBodyFailed)?;
 
                 Ok(ActionEndpointRet::Ok(ok_json))
             }
-            status => match serde_json::from_slice::<ActionResponseErrBody>(&response.body()) {
+            status => match serde_json::from_slice::<ActionResponseErrBody>(response.body()) {
                 Ok(err_json) => Ok(ActionEndpointRet::Other((status, Ok(err_json)))),
                 Err(_) => Ok(ActionEndpointRet::Other((
                     status,

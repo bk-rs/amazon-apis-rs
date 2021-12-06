@@ -20,7 +20,7 @@ pub fn new<'a>(
 ) -> Action<'a, DetectLabelsRequestBody, DetectLabelsResponseOkBody> {
     Action::new(
         access_key_id,
-        secret_access_key.as_ref(),
+        secret_access_key,
         service_endpoint,
         request_body,
         OPERATION_NAME,
