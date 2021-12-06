@@ -1,10 +1,19 @@
 [package]
 name = "amazon-rekognition"
-version = "0.0.0"
+version = "0.1.0"
+authors = ["vkill <vkill.net@gmail.com>"]
 edition = "2021"
+description = "Amazon Rekognition"
+license = "Apache-2.0 OR MIT"
+repository = "https://github.com/bk-rs/amazon-apis-rs"
+homepage = "https://github.com/bk-rs/amazon-apis-rs"
+documentation = "https://docs.rs/amazon-rekognition"
+keywords = []
+categories = []
+readme = "README.md"
 
 [dependencies]
-amazon-sigv4-kit = { version = "^0.0", path = "../amazon-sigv4-kit" }
+amazon-sigv4-kit = { version = "^0.1", path = "../amazon-sigv4-kit" }
 
 http-api-client-endpoint = { version = "0.2", default-features = false }
 

@@ -94,6 +94,7 @@ where
     }
 }
 
+//
 impl<'a, ReqB, ResOkB> Endpoint for Action<'a, ReqB, ResOkB>
 where
     ReqB: Serialize,

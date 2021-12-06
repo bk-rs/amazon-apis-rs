@@ -13,22 +13,22 @@ use aws_sigv4::{
 use http::Request;
 
 //
-pub fn sign_http_request<SSCB, SRCB>(
+pub fn sign_http_request<SSED, SRED>(
     mut request: Request<Vec<u8>>,
     access_key_id: &str,
     secret_access_key: &str,
     region: &str,
     service_name: &str,
-    mut signing_settings_callback: SSCB,
-    mut signing_params_callback: SRCB,
+    mut signing_settings_editor: SSED,
+    mut signing_params_editor: SRED,
 ) -> Result<Request<Vec<u8>>, SignHttpRequestError>
 where
-    SSCB: FnMut(SigningSettings) -> SigningSettings + Send,
-    SRCB: FnMut(SigningParams) -> SigningParams + Send,
+    SSED: FnMut(SigningSettings) -> SigningSettings + Send,
+    SRED: FnMut(SigningParams) -> SigningParams + Send,
 {
     let mut signing_settings = SigningSettings::default();
     signing_settings.expires_in = Some(Duration::from_secs(60 * 10));
-    let signing_settings = signing_settings_callback(signing_settings);
+    let signing_settings = signing_settings_editor(signing_settings);
 
     let signing_params = SigningParams::builder()
         .access_key(access_key_id)
@@ -39,7 +39,7 @@ where
         .settings(signing_settings)
         .build()
         .map_err(SignHttpRequestError::MakeSigningParamsFailed)?;
-    let signing_params = signing_params_callback(signing_params);
+    let signing_params = signing_params_editor(signing_params);
 
     let signable_request = SignableRequest::from(&request);
     let (signing_instructions, _signature) = sign(signable_request, &signing_params)
